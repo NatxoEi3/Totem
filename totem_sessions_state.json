@@ -34,5 +34,107 @@
     ],
     "es_despedida": true,
     "cierre_forzado_por_keyword": false
+  },
+  "af01006b-6ca2-4a8b-a755-dabcf9bf5821": {
+    "session_id": "af01006b-6ca2-4a8b-a755-dabcf9bf5821",
+    "texto_usuario": "Subtítulos realizados por la comunidad de Amara.org",
+    "respuesta": "Parece que estás compartiendo algo relacionado con videos o subtítulos. ¿Cómo te llamas y en qué empresa trabajas?",
+    "slots": {},
+    "campos_pendientes": [
+      "nombre",
+      "empresa",
+      "correo",
+      "telefono"
+    ],
+    "campos_completos": false,
+    "campos_totales": 4,
+    "campos_llenos": 0,
+    "progreso": 0.0,
+    "terminar": false,
+    "resultado_bruto": [
+      "Parece que estás compartiendo algo relacionado con videos o subtítulos. ¿Cómo te llamas y en qué empresa trabajas?",
+      {},
+      [
+        "nombre",
+        "empresa",
+        "correo",
+        "telefono"
+      ],
+      false
+    ],
+    "es_despedida": false,
+    "cierre_forzado_por_keyword": false
+  },
+  "b9d20996-6e61-49ef-9c4e-3968b23f6982": {
+    "session_id": "b9d20996-6e61-49ef-9c4e-3968b23f6982",
+    "texto_usuario": "Sí, por favor, y también en mi WhatsApp.",
+    "respuesta": "Claro, Nacho. Con todo lo que me compartiste, ya puedo enviar tu información a nuestro equipo para preparar la propuesta. Te la mandaré a tu correo y también a tu WhatsApp. Además, uno de nuestros asesores se pondrá en contacto contigo. ¡Gracias!",
+    "slots": {
+      "empresa": "EI-4",
+      "nombre": "Nacho",
+      "correo": "www.i4@evolucioni3.com",
+      "telefono": "8 11 6 17 70 52",
+      "detalle_zoho_crm": "En una libreta chicharronera.",
+      "OBJETIVO": "facturación digital, marketplaces y CRM | detalle_zoho_crm En una libreta chicharronera.",
+      "solucion_a_implementar": "facturación digital, marketplaces y CRM"
+    },
+    "campos_pendientes": [],
+    "campos_completos": true,
+    "campos_totales": 4,
+    "campos_llenos": 4,
+    "progreso": 1.0,
+    "terminar": true,
+    "resultado_bruto": [
+      "Claro, Nacho. Con todo lo que me compartiste, ya puedo enviar tu información a nuestro equipo para preparar la propuesta. Te la mandaré a tu correo y también a tu WhatsApp. Además, uno de nuestros asesores se pondrá en contacto contigo. ¡Gracias!",
+      {
+        "empresa": "EI-4",
+        "nombre": "Nacho",
+        "correo": "www.i4@evolucioni3.com",
+        "telefono": "8 11 6 17 70 52",
+        "detalle_zoho_crm": "En una libreta chicharronera.",
+        "OBJETIVO": "facturación digital, marketplaces y CRM | detalle_zoho_crm En una libreta chicharronera.",
+        "solucion_a_implementar": "facturación digital, marketplaces y CRM"
+      },
+      [],
+      true
+    ],
+    "es_despedida": true,
+    "cierre_forzado_por_keyword": false
+  },
+  "34d209fa-c326-4302-a000-b5137471ceec": {
+    "session_id": "34d209fa-c326-4302-a000-b5137471ceec",
+    "texto_usuario": "Sí, por favor, quiero que me hagas una propuesta de eso y la facturación electrónica.",
+    "respuesta": "Perfecto, Pancho. Con lo que me compartiste, ya puedo preparar una propuesta para implementar el CRM con inteligencia artificial y la facturación electrónica. Te la enviaré a tu correo. Además, uno de nuestros asesores se pondrá en contacto contigo para afinar detalles. ¡Gracias por tu interés!",
+    "slots": {
+      "empresa": "EI5",
+      "nombre": "Pancho",
+      "correo": "comercial@evolucioni3.com",
+      "telefono": "8116177052",
+      "detalle_zoho_crm": "Manejo de prospectos en libretas, interés en inteligencia artificial.",
+      "OBJETIVO": "CRM con inteligencia artificial y facturación electrónica | detalle_zoho_crm Manejo de prospectos en libretas, interés en inteligencia artificial.",
+      "solucion_a_implementar": "CRM con inteligencia artificial y facturación electrónica"
+    },
+    "campos_pendientes": [],
+    "campos_completos": true,
+    "campos_totales": 4,
+    "campos_llenos": 4,
+    "progreso": 1.0,
+    "terminar": true,
+    "resultado_bruto": [
+      "Perfecto, Pancho. Con lo que me compartiste, ya puedo preparar una propuesta para implementar el CRM con inteligencia artificial y la facturación electrónica. Te la enviaré a tu correo. Además, uno de nuestros asesores se pondrá en contacto contigo para afinar detalles. ¡Gracias por tu interés!",
+      {
+        "empresa": "EI5",
+        "nombre": "Pancho",
+        "correo": "comercial@evolucioni3.com",
+        "telefono": "8116177052",
+        "detalle_zoho_crm": "Manejo de prospectos en libretas, interés en inteligencia artificial.",
+        "OBJETIVO": "CRM con inteligencia artificial y facturación electrónica | detalle_zoho_crm Manejo de prospectos en libretas, interés en inteligencia artificial.",
+        "solucion_a_implementar": "CRM con inteligencia artificial y facturación electrónica"
+      },
+      [],
+      true
+    ],
+    "es_despedida": true,
+    "cierre_forzado_por_keyword": false
   }
 }
