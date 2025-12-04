@@ -1,216 +1,127 @@
 # -*- coding: utf-8 -*-
-"""
-core.obsbot_patrol
-
-Modo patrulla 100% automático (hecho por la OBSBOT / su app) + handoff a core.camera_agent.
-
-- La OBSBOT se mueve sola (modo patrulla / tracking activado en su app).
-- Este script SOLO:
-    1) Lee el video de la cámara.
-    2) Usa YOLO para detectar personas.
-    3) Cuando alguien se acerca lo suficiente (bbox grande):
-        - Libera la cámara.
-        - Cierra la ventana.
-        - Llama a core.camera_agent.iniciar_detector().
-
-No se usan teclas, no se manda nada a la cámara. Todo el movimiento es del hardware.
-"""
-
-from __future__ import annotations
-
+import os
+import subprocess
 import time
-from typing import Optional, Tuple
 
-import cv2
-from ultralytics import YOLO
+# ========= RUTAS =========
 
+# Imagen de la infografía (salida del Totem)
+IMAGE_PATH = r"C:\Users\joses\Documents\Totem\infografias\infografia_totem.png"
 
-# =========================
-# CONFIGURACIÓN
-# =========================
+# PDF temporal/definitivo para imprimir (media carta)
+PDF_PATH = r"C:\Users\joses\Documents\Totem\infografias\infografia_Chur_Industries_MEDIACARTA.pdf"
 
-CAMERA_INDEX = 1         # si no toma video, prueba 1 o 2
-YOLO_MODEL_PATH = "yolov8n.pt"
+# Ruta donde tienes SumatraPDF portable
+SUMATRA_PATH = r"C:\Users\joses\OneDrive\Escritorio\SumatraPDF-3.5.2-64\SumatraPDF-3.5.2-64.exe"
 
-CONF_THRESHOLD = 0.5
-
-# Cuando el alto del bbox es >= a este % de la altura del frame,
-# consideramos que la persona "ya se acercó" = lanzar camera_agent
-APPROACH_HEIGHT_RATIO = 0.35  # 35% de la altura del frame
-
-# Para aligerar: no correr YOLO en TODOS los frames
-YOLO_EVERY_N_FRAMES = 4
-
-SHOW_FPS = True
+# Nombre EXACTO de la impresora en Windows
+PRINTER_NAME = r"HP Color LaserJet MFP M477fdw (3F853F)"
 
 
-# =========================
-# INTEGRACIÓN CON camera_agent
-# =========================
+# ========= 1) CONVERTIR PNG -> PDF MEDIA CARTA =========
 
-def lanzar_camera_agent() -> None:
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+
+
+def png_a_pdf_mediacarta(path_png: str, path_pdf: str) -> None:
     """
-    Importa y lanza core.camera_agent.iniciar_detector().
+    Convierte un PNG a un PDF tamaño Media Carta (5.5 x 8.5 pulgadas)
+    en horizontal (landscape), ocupando toda la página.
     """
+    if not os.path.isfile(path_png):
+        print(f"⚠️ La imagen NO existe: {path_png}")
+        return
+
+    # Media carta (5.5 x 8.5) pero en horizontal: 8.5 de ancho x 5.5 de alto
+    width = 8.5 * inch
+    height = 5.5 * inch
+
+    c = canvas.Canvas(path_pdf, pagesize=(width, height))
+
+    # Dibujar la imagen ocupando toda la página
+    # (si la proporción no es exacta, se estira un poquito)
+    c.drawImage(path_png, 0, 0, width=width, height=height)
+
+    c.showPage()
+    c.save()
+
+    print(f"✅ PDF media carta generado: {path_pdf}")
+
+
+# ========= 2) LIMPIAR COLA DE IMPRESIÓN =========
+
+def limpiar_cola_impresora(printer_name: str) -> None:
+    """Borra TODOS los trabajos pendientes de la cola de la impresora indicada."""
+    print(f"🧹 Limpiando cola de impresión de: {printer_name!r}")
+    cmd = [
+        "powershell",
+        "-Command",
+        (
+            f"Get-PrintJob -PrinterName '{printer_name}' "
+            "| Remove-PrintJob -Confirm:$false"
+        ),
+    ]
     try:
-        from core import camera_agent
-    except ImportError as e:
-        print(f"[camera_agent] ERROR importando core.camera_agent: {e}")
+        subprocess.run(cmd, check=False)
+        print("✅ Cola de impresión limpiada (o ya estaba vacía).")
+    except Exception as e:
+        print(f"⚠️ No se pudo limpiar la cola de impresión: {e}")
+
+
+# ========= 3) IMPRIMIR PDF CON SUMATRA (1 COPIA, AJUSTADO) =========
+
+def imprimir_pdf_una_copia(path_pdf: str) -> None:
+    print("=== IMPRESIÓN PDF (Sumatra, 1 copia, fit) ===")
+    print(f"os.name       : {os.name}")
+    print(f"PDF           : {path_pdf}")
+    print(f"Sumatra exe   : {SUMATRA_PATH}")
+
+    if not os.path.isfile(path_pdf):
+        print(f"⚠️ El archivo PDF NO existe: {path_pdf}")
         return
 
-    if not hasattr(camera_agent, "iniciar_detector"):
-        print("[camera_agent] No existe la función iniciar_detector() en core.camera_agent.")
+    if os.name != "nt":
+        print(f"⚠️ Solo implementado para Windows (os.name={os.name})")
         return
 
-    print("[camera_agent] Lanzando camera_agent.iniciar_detector() ...")
-    camera_agent.iniciar_detector()
-
-
-# =========================
-# YOLO: UTILIDADES
-# =========================
-
-def get_biggest_person_box(result, frame_shape) -> Optional[Tuple[int, int, int, int, float]]:
-    """
-    Devuelve el bounding box de la persona más grande (en pixeles) junto con la confianza.
-    Si no hay personas, regresa None.
-    """
-    h, w, _ = frame_shape
-    if result.boxes is None or len(result.boxes) == 0:
-        return None
-
-    best_box = None
-    best_area = 0.0
-    best_conf = 0.0
-
-    for box in result.boxes:
-        cls_id = int(box.cls[0].item())
-        conf = float(box.conf[0].item())
-        if cls_id != 0:  # clase 0 = persona (COCO)
-            continue
-        if conf < CONF_THRESHOLD:
-            continue
-
-        x1, y1, x2, y2 = box.xyxy[0].tolist()
-        x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-        area = (x2 - x1) * (y2 - y1)
-
-        if area > best_area:
-            best_area = area
-            best_box = (x1, y1, x2, y2)
-            best_conf = conf
-
-    if best_box is None:
-        return None
-
-    return (*best_box, best_conf)
-
-
-# =========================
-# LOOP PRINCIPAL
-# =========================
-
-def main() -> None:
-    print(">>> Iniciando core.obsbot_patrol (patrulla hardware + handoff a camera_agent)")
-    print(f">>> Cámara índice: {CAMERA_INDEX}")
-    print(f">>> Modelo YOLO: {YOLO_MODEL_PATH}")
-
-    model = YOLO(YOLO_MODEL_PATH)
-
-    cap = cv2.VideoCapture(CAMERA_INDEX, cv2.CAP_DSHOW)
-    if not cap.isOpened():
-        print("ERROR: No se pudo abrir la cámara. Cambia CAMERA_INDEX o revisa la OBSBOT.")
+    if not os.path.isfile(SUMATRA_PATH):
+        print(f"⚠️ SumatraPDF no encontrado en: {SUMATRA_PATH}")
         return
 
-    last_time = time.time()
-    frame_count = 0
+    # 1) Limpiar cola antes de imprimir
+    limpiar_cola_impresora(PRINTER_NAME)
+    time.sleep(1)
 
+    # 2) Mandar SOLO 1 copia, ajustada a la hoja
     try:
-        while True:
-            ret, frame = cap.read()
-            if not ret:
-                print("ERROR: No se pudo leer frame de la cámara.")
-                break
+        print('\n--- SumatraPDF -print-to-default -print-settings "fit,1x" ---')
+        subprocess.run(
+            [
+                SUMATRA_PATH,
+                "-print-to-default",
+                "-exit-on-print",
+                "-print-settings",
+                "fit,1x",   # ajusta a la hoja + UNA sola copia
+                path_pdf,
+            ],
+            check=True,
+            shell=False,
+        )
+        print("🖨 (Sumatra) PDF enviado a la impresora (1 copia, media carta).")
+    except Exception as e:
+        print(f"❌ Error al imprimir con SumatraPDF: {e}")
 
-            frame_count += 1
-            h, w, _ = frame.shape
 
-            person_box = None
-            if frame_count % YOLO_EVERY_N_FRAMES == 0:
-                # YOLO más ligero con imgsz
-                results = model.predict(frame, imgsz=480, verbose=False)
-                result = results[0]
-                person_box = get_biggest_person_box(result, frame.shape)
+# ========= 4) ORQUESTADOR =========
 
-            if person_box is not None:
-                x1, y1, x2, y2, conf = person_box
-                bbox_height = y2 - y1
-                ratio = bbox_height / float(h)
+def imprimir_infografia_desde_png() -> None:
+    # 1) Convertir PNG a PDF media carta
+    png_a_pdf_mediacarta(IMAGE_PATH, PDF_PATH)
 
-                # Dibujamos bbox y datos
-                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                label = f"Persona ({conf:.2f}, ratio={ratio:.2f})"
-                cv2.putText(
-                    frame,
-                    label,
-                    (x1, max(y1 - 10, 0)),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    0.6,
-                    (0, 255, 0),
-                    2,
-                    cv2.LINE_AA,
-                )
-
-                if ratio >= APPROACH_HEIGHT_RATIO:
-                    print(f"[Handoff] Persona acercándose (ratio={ratio:.2f}) -> llamar camera_agent.")
-                    cap.release()
-                    cv2.destroyAllWindows()
-                    lanzar_camera_agent()
-                    return
-
-            # Estado en pantalla (patrulla a nivel hardware)
-            cv2.putText(
-                frame,
-                "Estado: PATRULLA (movimiento por hardware/camara)",
-                (10, 30),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                0.6,
-                (0, 255, 255),
-                2,
-                cv2.LINE_AA,
-            )
-
-            # FPS
-            if SHOW_FPS:
-                ahora = time.time()
-                elapsed = ahora - last_time
-                if elapsed > 0:
-                    fps = frame_count / elapsed
-                    cv2.putText(
-                        frame,
-                        f"FPS: {fps:.1f}",
-                        (10, 60),
-                        cv2.FONT_HERSHEY_SIMPLEX,
-                        0.7,
-                        (255, 255, 255),
-                        2,
-                        cv2.LINE_AA,
-                    )
-
-            cv2.imshow("OBSBOT Patrulla (hardware) + YOLO handoff", frame)
-
-            key = cv2.waitKey(1) & 0xFF
-            if key == 27 or key == ord("q"):
-                print(">>> Saliendo de core.obsbot_patrol (ESC/q)")
-                break
-
-    finally:
-        try:
-            cap.release()
-        except Exception:
-            pass
-        cv2.destroyAllWindows()
+    # 2) Imprimir ese PDF una sola vez
+    imprimir_pdf_una_copia(PDF_PATH)
 
 
 if __name__ == "__main__":
-    main()
+    imprimir_infografia_desde_png()

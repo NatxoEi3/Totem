@@ -240,5 +240,177 @@
     ],
     "es_despedida": true,
     "cierre_forzado_por_keyword": false
+  },
+  "0db5b758-c138-4586-bc0f-6cffa22b1aef": {
+    "session_id": "0db5b758-c138-4586-bc0f-6cffa22b1aef",
+    "texto_usuario": "Me llamo Isabel García",
+    "respuesta": "¡Hola, Isabel! Encantado de conocerte. Por cierto, ¿cómo se llama tu empresa?",
+    "slots": {
+      "nombre": "Isabel García"
+    },
+    "campos_pendientes": [
+      "empresa",
+      "correo",
+      "telefono"
+    ],
+    "campos_completos": false,
+    "campos_totales": 4,
+    "campos_llenos": 1,
+    "progreso": 0.25,
+    "terminar": false,
+    "resultado_bruto": [
+      "¡Hola, Isabel! Encantado de conocerte. Por cierto, ¿cómo se llama tu empresa?",
+      {
+        "nombre": "Isabel García"
+      },
+      [
+        "empresa",
+        "correo",
+        "telefono"
+      ],
+      false
+    ],
+    "es_despedida": false,
+    "cierre_forzado_por_keyword": false
+  },
+  "4b974dab-a922-47c6-8e50-b3f746839830": {
+    "session_id": "4b974dab-a922-47c6-8e50-b3f746839830",
+    "texto_usuario": "y 8 no hay manera de cortarle ese todo ese show",
+    "respuesta": "Entiendo, Isabel. A veces puede ser complicado lidiar con ciertos procesos. Pero cuéntame, ¿cómo se llama tu empresa?",
+    "slots": {
+      "nombre": "Isabel"
+    },
+    "campos_pendientes": [
+      "empresa",
+      "correo",
+      "telefono"
+    ],
+    "campos_completos": false,
+    "campos_totales": 4,
+    "campos_llenos": 1,
+    "progreso": 0.25,
+    "terminar": false,
+    "resultado_bruto": [
+      "Entiendo, Isabel. A veces puede ser complicado lidiar con ciertos procesos. Pero cuéntame, ¿cómo se llama tu empresa?",
+      {
+        "nombre": "Isabel"
+      },
+      [
+        "empresa",
+        "correo",
+        "telefono"
+      ],
+      false
+    ],
+    "es_despedida": false,
+    "cierre_forzado_por_keyword": false
+  },
+  "9a58d344-605f-4f09-b291-c4be7d3550b3": {
+    "session_id": "9a58d344-605f-4f09-b291-c4be7d3550b3",
+    "texto_usuario": "sería todo amigos, muchas gracias hasta la próxima",
+    "respuesta": "¡Gracias a ti, Juan! Me alegra haber podido ayudarte. Estaré preparando tu propuesta y te la enviaré a tu correo. Si surge alguna otra duda o necesitas algo más en el futuro, aquí estaré. ¡Hasta la próxima!",
+    "slots": {
+      "nombre": "Juan Penas",
+      "empresa": "Chur Industries",
+      "correo": "latina5@evolucion3.com",
+      "telefono": "811681755",
+      "detalle_creator": "Quieren gestionar desde la orden de servicio hasta el WMS, YMS y TBMS.",
+      "OBJETIVO": "Quieren gestionar desde la orden de servicio hasta el WMS, YMS y TBMS. | detalle_creator Quieren gestionar desde la orden de servicio hasta el WMS, YMS y TBMS. | detalle_desk Atendiendo solicitudes por WhatsApp, creando grupos y respondiendo ahí, sin medir tiempos ni asignación de tickets.",
+      "detalle_desk": "Atendiendo solicitudes por WhatsApp, creando grupos y respondiendo ahí, sin medir tiempos ni asignación de tickets.",
+      "solucion_a_implementar": "Quieren gestionar desde la orden de servicio hasta el WMS, YMS y TBMS."
+    },
+    "campos_pendientes": [],
+    "campos_completos": true,
+    "campos_totales": 4,
+    "campos_llenos": 4,
+    "progreso": 1.0,
+    "terminar": true,
+    "resultado_bruto": [
+      "¡Gracias a ti, Juan! Me alegra haber podido ayudarte. Estaré preparando tu propuesta y te la enviaré a tu correo. Si surge alguna otra duda o necesitas algo más en el futuro, aquí estaré. ¡Hasta la próxima!",
+      {
+        "nombre": "Juan Penas",
+        "empresa": "Chur Industries",
+        "correo": "latina5@evolucion3.com",
+        "telefono": "811681755",
+        "detalle_creator": "Quieren gestionar desde la orden de servicio hasta el WMS, YMS y TBMS.",
+        "OBJETIVO": "Quieren gestionar desde la orden de servicio hasta el WMS, YMS y TBMS. | detalle_creator Quieren gestionar desde la orden de servicio hasta el WMS, YMS y TBMS. | detalle_desk Atendiendo solicitudes por WhatsApp, creando grupos y respondiendo ahí, sin medir tiempos ni asignación de tickets.",
+        "detalle_desk": "Atendiendo solicitudes por WhatsApp, creando grupos y respondiendo ahí, sin medir tiempos ni asignación de tickets.",
+        "solucion_a_implementar": "Quieren gestionar desde la orden de servicio hasta el WMS, YMS y TBMS."
+      },
+      [],
+      true
+    ],
+    "es_despedida": true,
+    "cierre_forzado_por_keyword": false
+  },
+  "2b15dbe1-7407-4747-9ccd-2b72b2e2a96a": {
+    "session_id": "2b15dbe1-7407-4747-9ccd-2b72b2e2a96a",
+    "texto_usuario": "Gracias.",
+    "respuesta": "¡De nada, Indalesio! Si necesitas algo más o tienes alguna duda en el futuro, no dudes en contactarme. Estoy aquí para ayudarte. Que tengas un excelente día.",
+    "slots": {
+      "nombre": "Indalesio",
+      "empresa": "Indies Industries",
+      "correo": "comercial@evolucioni3.com",
+      "telefono": "81161770",
+      "solucion_a_implementar": "control de inventarios y gestión administrativa, facturación, compras, ventas, contabilidad",
+      "OBJETIVO": "control de inventarios y gestión administrativa, facturación, compras, ventas, contabilidad"
+    },
+    "campos_pendientes": [],
+    "campos_completos": true,
+    "campos_totales": 4,
+    "campos_llenos": 4,
+    "progreso": 1.0,
+    "terminar": true,
+    "resultado_bruto": [
+      "¡De nada, Indalesio! Si necesitas algo más o tienes alguna duda en el futuro, no dudes en contactarme. Estoy aquí para ayudarte. Que tengas un excelente día.",
+      {
+        "nombre": "Indalesio",
+        "empresa": "Indies Industries",
+        "correo": "comercial@evolucioni3.com",
+        "telefono": "81161770",
+        "solucion_a_implementar": "control de inventarios y gestión administrativa, facturación, compras, ventas, contabilidad",
+        "OBJETIVO": "control de inventarios y gestión administrativa, facturación, compras, ventas, contabilidad"
+      },
+      [],
+      true
+    ],
+    "es_despedida": true,
+    "cierre_forzado_por_keyword": false
+  },
+  "bf3eaa08-6ba5-4d66-9dbb-60c2f8ccfdb7": {
+    "session_id": "bf3eaa08-6ba5-4d66-9dbb-60c2f8ccfdb7",
+    "texto_usuario": "Muchas gracias, adiós.",
+    "respuesta": "¡Gracias a ti, Ñaki! Si necesitas algo más en el futuro, no dudes en regresar. ¡Hasta luego!",
+    "slots": {
+      "nombre": "Ñaki",
+      "empresa": "Chuchitos Industries",
+      "correo": "facturacion@evolucioni3.com",
+      "solucion_a_implementar": "propuesta de Zoho CRM Plus",
+      "OBJETIVO": "propuesta de Zoho CRM Plus"
+    },
+    "campos_pendientes": [
+      "telefono"
+    ],
+    "campos_completos": false,
+    "campos_totales": 4,
+    "campos_llenos": 3,
+    "progreso": 0.75,
+    "terminar": true,
+    "resultado_bruto": [
+      "¡Gracias a ti, Ñaki! Si necesitas algo más en el futuro, no dudes en regresar. ¡Hasta luego!",
+      {
+        "nombre": "Ñaki",
+        "empresa": "Chuchitos Industries",
+        "correo": "facturacion@evolucioni3.com",
+        "solucion_a_implementar": "propuesta de Zoho CRM Plus",
+        "OBJETIVO": "propuesta de Zoho CRM Plus"
+      },
+      [
+        "telefono"
+      ],
+      false
+    ],
+    "es_despedida": true,
+    "cierre_forzado_por_keyword": false
   }
 }
